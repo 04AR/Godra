@@ -11,7 +11,6 @@ import (
     
 	"github.com/example/godra/internal/api"
 	"github.com/example/godra/internal/auth"
-	"github.com/example/godra/internal/config"
 	"github.com/example/godra/internal/database"
 	"github.com/example/godra/internal/gamestate"
 	"github.com/example/godra/internal/metrics"
@@ -20,10 +19,10 @@ import (
 
 func main() {
 	// Init Logger
-	logger.Init()
+	metrics.Init()
 
 	// Load Config
-	cfg := config.Load()
+	cfg := Load()
 	log.Printf("Starting Godra Server on port %s...", cfg.Port)
 
 	// Init DB
@@ -61,4 +60,5 @@ func main() {
 	//Start Server
 	log.Fatal(http.ListenAndServe(":"+cfg.Port, r))
 }
+
 
