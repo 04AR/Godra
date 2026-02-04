@@ -8,8 +8,8 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
-	"github.com/example/godra/internal/database"
-	"github.com/example/godra/internal/gamestate"
+	"godra/internal/database"
+	"godra/internal/gamestate"
 )
 
 type AuthRequest struct {
@@ -99,23 +99,23 @@ func GuestLoginHandler(w http.ResponseWriter, r *http.Request) {
 	// Simple Guest Login
 	// Generate random Guest ID
 	guestID := fmt.Sprintf("guest:%s", database.GenerateRandomString(8))
-	
-    // Store in Redis (Temporary)
-    // We treat "guest:xyz" as a key with dummy value
-    gamestate.RDB.Set(r.Context(), guestID, "active", 24*time.Hour)
+
+	// Store in Redis (Temporary)
+	// We treat "guest:xyz" as a key with dummy value
+	gamestate.RDB.Set(r.Context(), guestID, "active", 24*time.Hour)
 
 	token, err := GenerateToken(guestID, "Guest", "guest")
 	if err != nil {
 		http.Error(w, "Error generating token", http.StatusInternalServerError)
 		return
 	}
-	
+
 	resp := map[string]string{
-		"token": token,
+		"token":   token,
 		"user_id": guestID,
-		"role": "guest",
+		"role":    "guest",
 	}
-	
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(resp)
 }

@@ -8,13 +8,13 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-    
-	"github.com/example/godra/internal/api"
-	"github.com/example/godra/internal/auth"
-	"github.com/example/godra/internal/database"
-	"github.com/example/godra/internal/gamestate"
-	"github.com/example/godra/internal/metrics"
-	"github.com/example/godra/internal/ws"
+
+	"godra/internal/api"
+	"godra/internal/auth"
+	"godra/internal/database"
+	"godra/internal/gamestate"
+	"godra/internal/metrics"
+	"godra/internal/ws"
 )
 
 func main() {
@@ -50,7 +50,7 @@ func main() {
 	r.Post("/login", auth.LoginHandler)
 	r.Post("/guest-login", auth.GuestLoginHandler)
 	r.Post("/api/rpc", api.RPCHandler)
-	
+
 	r.Get("/metrics", metrics.Handler)
 
 	r.Get("/ws", func(w http.ResponseWriter, r *http.Request) {
@@ -60,5 +60,3 @@ func main() {
 	//Start Server
 	log.Fatal(http.ListenAndServe(":"+cfg.Port, r))
 }
-
-

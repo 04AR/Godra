@@ -5,7 +5,7 @@ import (
 	"log"
 	"sync"
 
-	"github.com/example/godra/internal/gamestate"
+	"godra/internal/gamestate"
 )
 
 type GameRoom struct {
@@ -16,11 +16,11 @@ type GameRoom struct {
 }
 
 type Hub struct {
-	clients map[*Client]bool
-	register chan *Client
+	clients    map[*Client]bool
+	register   chan *Client
 	unregister chan *Client
-	rooms map[string]*GameRoom
-	mu    sync.Mutex
+	rooms      map[string]*GameRoom
+	mu         sync.Mutex
 }
 
 func NewHub() *Hub {

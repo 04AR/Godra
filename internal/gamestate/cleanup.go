@@ -2,10 +2,11 @@ package gamestate
 
 import (
 	"context"
-	"github.com/example/godra/internal/logger"
-	"github.com/redis/go-redis/v9"
+	"godra/internal/metrics"
 	"strconv"
 	"time"
+
+	"github.com/redis/go-redis/v9"
 )
 
 // StartSessionCleaner starts a background worker that cleans up expired guest sessions
@@ -37,13 +38,13 @@ func cleanupExpiredSessions(expirySeconds int) {
 	}).Result()
 
 	if err != nil {
-		logger.Log.Error("Failed to scan expired sessions", "error", err)
+		metrics.Log.Error("Failed to scan expired sessions", "error", err)
 		return
 	}
 
 	for _, userID := range users {
-		logger.Log.Info("Cleaning up expired session", "user_id", userID)
-		
+		metrics.Log.Info("Cleaning up expired session", "user_id", userID)
+
 		// Remove from Sorted Set
 		RDB.ZRem(context.Background(), "active_sessions:guests", userID)
 

@@ -6,9 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/example/godra/internal/auth"
-	"github.com/example/godra/internal/gamestate"
-	"github.com/example/godra/internal/metrics"
+	"godra/internal/auth"
+	"godra/internal/gamestate"
+	"godra/internal/metrics"
+
 	"github.com/gorilla/websocket"
 )
 
@@ -50,7 +51,7 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	_, err = gamestate.ExecuteScript(r.Context(), "on_connect", []string{gameKey, playersKey}, claims.Username, gameID)
 	if err != nil {
 		log.Printf("Connection rejected by on_connect hook: %v", err)
-		http.Error(w, "Connection rejected: " + err.Error(), http.StatusForbidden)
+		http.Error(w, "Connection rejected: "+err.Error(), http.StatusForbidden)
 		return
 	}
 
@@ -72,7 +73,7 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	}
 
 	client.Hub.register <- client
-  
+
 	go client.writePump()
 	go client.readPump()
 }
@@ -83,7 +84,7 @@ func (c *Client) readPump() {
 		c.Hub.unregister <- c
 		c.Conn.Close()
 		metrics.ActiveConnections.Add(^int64(0))
-		
+
 		if len(c.UserID) > 6 && c.UserID[:6] == "guest:" {
 			// Clean up guest data via Lua
 			gamestate.ExecuteScript(context.Background(), "on_disconnect", []string{}, c.UserID)
@@ -101,7 +102,7 @@ func (c *Client) readPump() {
 
 		// Process message execute Lua script
 		log.Printf("Player %s sent action: %s", c.Username, string(message))
-		
+
 		gameKey := "game:" + c.GameID
 		_, err = gamestate.ExecuteScript(context.Background(), "update_state", []string{gameKey}, c.Username, string(message))
 		if err != nil {
@@ -135,12 +136,12 @@ func (c *Client) writePump() {
 				if len(buffer) == 1 {
 					c.Conn.WriteMessage(websocket.TextMessage, buffer[0])
 				} else {
-					// Combine into batch JSON				
+					// Combine into batch JSON
 					w, err := c.Conn.NextWriter(websocket.TextMessage)
 					if err != nil {
 						return
 					}
-					
+
 					w.Write([]byte(`{"type":"batch","events":[`))
 					for i, msg := range buffer {
 						if i > 0 {
@@ -149,7 +150,7 @@ func (c *Client) writePump() {
 						w.Write(msg)
 					}
 					w.Write([]byte(`]}`))
-					
+
 					if err := w.Close(); err != nil {
 						return
 					}

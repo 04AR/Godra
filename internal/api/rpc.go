@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/example/godra/internal/auth"
-	"github.com/example/godra/internal/gamestate"
+	"godra/internal/auth"
+	"godra/internal/gamestate"
 )
 
 type RPCRequest struct {
@@ -24,7 +24,7 @@ func RPCHandler(w http.ResponseWriter, r *http.Request) {
 	if len(tokenString) > 7 && tokenString[:7] == "Bearer " {
 		tokenString = tokenString[7:]
 	}
-	
+
 	claims, err := auth.ValidateToken(tokenString)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -64,7 +64,7 @@ func RPCHandler(w http.ResponseWriter, r *http.Request) {
 	// We now support custom KEYS via RPC if provided.
 	result, err := gamestate.ExecuteScript(r.Context(), req.Script, req.Keys, finalArgs...)
 	if err != nil {
-		http.Error(w, "Script execution failed: " + err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Script execution failed: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
