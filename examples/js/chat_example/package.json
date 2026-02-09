@@ -1,0 +1,15 @@
+{
+    "name": "godra-chat-example",
+    "version": "1.0.0",
+    "description": "Chat example using Godra JS SDK",
+    "main": "main.js",
+    "type": "module",
+    "scripts": {
+        "start": "npx http-server ../../.. -p 8081 -o examples/js/chat_example/index.html",
+        "test": "node test_chat.js"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "http-server": "^14.1.1"
+    }
+}

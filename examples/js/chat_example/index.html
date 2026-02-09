@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Godra Chat Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Godra Chat</h1>
+            <div id="connection-status" class="status disconnected">Disconnected</div>
+        </header>
+
+        <main>
+            <!-- Login Section -->
+            <section id="login-section">
+                <div class="card">
+                    <h2>Login</h2>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Enter password">
+                    </div>
+                    <div class="button-group">
+                        <button id="btn-login" class="primary">Login</button>
+                        <button id="btn-register" class="secondary">Register</button>
+                        <button id="btn-guest" class="outline">Guest Login</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lobby Section (Hidden by default) -->
+            <section id="lobby-section" class="hidden">
+                <div class="user-info">
+                    Logged in as: <span id="user-display"></span>
+                    <button id="btn-logout" class="small">Logout</button>
+                </div>
+
+                <div class="card">
+                    <h2>Lobby Selection</h2>
+                    <div class="split-view">
+                        <div class="action-box">
+                            <h3>Create Room</h3>
+                            <button id="btn-create-lobby" class="primary">Create New Lobby</button>
+                        </div>
+                        <div class="divider">OR</div>
+                        <div class="action-box">
+                            <h3>Join Room</h3>
+                            <input type="text" id="lobby-id-input" placeholder="Enter Lobby ID">
+                            <button id="btn-join-lobby" class="secondary">Join</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chat Section (Hidden by default) -->
+            <section id="chat-section" class="hidden">
+                <div class="chat-header">
+                    <span>Room: <span id="room-display"></span></span>
+                    <button id="btn-leave-room" class="small">Leave Room</button>
+                </div>
+                
+                <div id="messages-container">
+                    <!-- Messages will appear here -->
+                    <div class="system-message">Welcome to the chat!</div>
+                </div>
+
+                <div class="input-area">
+                    <input type="text" id="message-input" placeholder="Type a message...">
+                    <button id="btn-send">Send</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
